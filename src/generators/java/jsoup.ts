@@ -1,8 +1,8 @@
-import { joinWords, eq } from "../../shell/Word.js";
-import { parse, getFirst, COMMON_SUPPORTED_ARGS } from "../../parse.js";
-import type { Request, Warnings } from "../../parse.js";
+import { joinWords, eq } from "../../shell/Word.ts";
+import { parse, getFirst, COMMON_SUPPORTED_ARGS } from "../../parse.ts";
+import type { Request, Warnings } from "../../parse.ts";
 
-import { repr } from "./java.js";
+import { repr } from "./java.ts";
 
 export const supportedArgs = new Set([
   ...COMMON_SUPPORTED_ARGS,
@@ -58,14 +58,13 @@ export const _toJavaJsoup = (
       if (eq(headerName.toLowerCase(), "user-agent")) {
         javaCode +=
           "\t\t\t.userAgent" + "(" + repr(headerValue, imports) + ")\n";
-      } else if (eq(headerName.toLowerCase(), "cookie")) {
-        const cookieValues = headerValue.split(";");
-        for (const index in cookieValues) {
+      } else if (eq(headerName.toLowerCase(), "cookie") && request.cookies) {
+        for (const [name, value] of request.cookies) {
           javaCode +=
             "\t\t\t.cookie(" +
-            repr(cookieValues[index].split("=")[0].trim(), imports) +
+            repr(name, imports) +
             ", " +
-            repr(cookieValues[index].split("=")[1].trim(), imports) +
+            repr(value, imports) +
             ")\n";
         }
       } else {
